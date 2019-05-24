@@ -4,7 +4,7 @@ var io = require('socket.io')(http);
 var port = process.env.PORT || 3000;
 
 app.get('/', function(req, res){
-    res.sendFile(__dirname + '/index.html');
+    res.send('Please run the index.html as a separate server (using webstorm: right click on index.html > open in browser)')
 });
 
 io.on('connection', function(socket){

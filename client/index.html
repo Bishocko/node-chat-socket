@@ -1,0 +1,52 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Socket.IO chat</title>
+        <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet"
+              id="bootstrap-css">
+        <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+        <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+        <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+        <link href="index.css" rel="stylesheet">
+        <script src="index.js"></script>
+    </head>
+    <body>
+        <div class="col-sm-3 col-sm-offset-4 frame">
+            <ul></ul>
+            <div>
+                <form action="">
+                    <div class="msj-rta macro">
+                        <div class="text text-r" style="background:whitesmoke !important">
+                            <input class="mytext" autofocus="autofocus" id="mytext" autocomplete="off"
+                                   placeholder="Type a message"/>
+                        </div>
+                    </div>
+                    <div style="padding:10px;">
+                        <input type="submit"><i class="glyphicon glyphicon-share-alt"></i></div>
+                </form>
+            </div>
+        </div>
+        <script>
+            $(function () {
+                var counter = 0;
+                var socket = io('http://localhost:3000');
+                // TODO load messages from localstorage
+
+                $('form').submit(function () {
+                    console.log("client message sent: " + $('#mytext').val())
+                    socket.emit('send-message', $('#mytext').val());
+                    $('#mytext').val('');
+                    return false;
+                });
+                socket.on('message-received', function (msg) {
+                    counter++;
+                    console.log("client message received: " + msg)
+                    // TODO use localstorage to store messages
+                    $('#messages').append($('<li>').text(msg));
+                    insertChat(counter % 2 === 0 ? 'me' : 'you', msg)
+                    window.scrollTo(0, document.body.scrollHeight);
+                });
+            });
+        </script>
+    </body>
+</html>
